@@ -20,7 +20,7 @@ Example for real-time bidirectional communication with a serverless worker, bypa
 
 The environment variable name includes the port: `RUNPOD_TCP_PORT_8765`
 
-## Server (rp_handler.py)
+## Server (handler.py)
 
 ```python
 from websocket_server import WebsocketServer
@@ -91,18 +91,17 @@ asyncio.run(client())
 ## Dockerfile
 
 ```dockerfile
-FROM python:3.10-slim
+FROM python:3.12-slim
 WORKDIR /
 COPY requirements.txt /requirements.txt
 RUN pip install -r requirements.txt
-COPY rp_handler.py /
-CMD ["python3", "-u", "rp_handler.py"]
+COPY handler.py /
+CMD ["python3", "-u", "handler.py"]
 ```
 
 ## Requirements
 
 ```
-runpod==1.7.7
+runpod
 websocket-server
-asyncio
 ```
