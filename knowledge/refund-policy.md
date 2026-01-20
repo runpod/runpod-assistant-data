@@ -19,6 +19,8 @@ Per Runpod's Terms of Service, credits added to your account are **non-refundabl
 
 If there is a problem on Runpod's end (platform outages, bugs, billing errors), Runpod will work with you to resolve the issue. After review, Runpod may credit your account if deemed appropriate. This is different from a refund—the credit stays in your Runpod account for future use.
 
+There may be unique exceptions that are handled with support on a 1:1 basis.
+
 ## What To Do If You Have Issues
 
 If you experienced a problem that resulted in unexpected charges:
