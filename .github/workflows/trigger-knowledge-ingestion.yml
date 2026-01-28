@@ -24,7 +24,7 @@ jobs:
           create_response=$(curl -s -w "\n%{http_code}" -X POST \
             "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" \
             -d '{}')
 
           create_code=$(echo "$create_response" | tail -n1)
@@ -41,7 +41,7 @@ jobs:
           start_response=$(curl -s -w "\n%{http_code}" -X POST \
             "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" \
             -d '{"inputData": {"branch": "main"}}')
 
           start_code=$(echo "$start_response" | tail -n1)
