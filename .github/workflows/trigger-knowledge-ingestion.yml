@@ -13,44 +13,125 @@ jobs:
   trigger-ingestion:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Mastra Knowledge Ingestion Workflow
+      - name: Validate secrets
         run: |
-          # Generate a unique run ID
-          RUN_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
+          missing=""
+          if [ -z "${{ secrets.MASTRA_BASE_URL }}" ]; then
+            missing="$missing MASTRA_BASE_URL"
+          fi
+          if [ -z "${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" ]; then
+            missing="$missing RUNPOD_ASSISTANT_API_KEY"
+          fi
+          if [ -n "$missing" ]; then
+            echo "::error::Missing required secrets:$missing. Add them in repo Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Create workflow run
+        run: |
+          RUN_ID=$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid 2>/dev/null || python3 -c 'import uuid; print(uuid.uuid4())')
+          RUN_ID=$(echo "$RUN_ID" | tr '[:upper:]' '[:lower:]')
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           echo "Run ID: $RUN_ID"
 
-          # Step 1: Create workflow run
-          echo "Creating workflow run..."
-          create_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.MASTRA_BASE_URL }}/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" \
             -d '{}')
 
-          create_code=$(echo "$create_response" | tail -n1)
-          create_body=$(echo "$create_response" | sed '$d')
-          echo "Create response: $create_body (HTTP $create_code)"
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
 
-          if [ "$create_code" -ne 200 ]; then
-            echo "❌ Failed to create workflow run"
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Workflow run created"
+          elif [ "$http_code" -eq 401 ] || [ "$http_code" -eq 403 ]; then
+            echo "::error::Authentication failed (HTTP $http_code). Check that RUNPOD_ASSISTANT_API_KEY is valid."
+            echo "Response: $body"
+            exit 1
+          elif [ "$http_code" -eq 404 ]; then
+            echo "::error::Workflow endpoint not found (HTTP 404). Check that MASTRA_BASE_URL is correct: ${{ secrets.MASTRA_BASE_URL }}"
+            echo "Response: $body"
+            exit 1
+          elif [ "$http_code" -eq 000 ]; then
+            echo "::error::Could not connect to ${{ secrets.MASTRA_BASE_URL }}. Is the server running?"
+            exit 1
+          else
+            echo "::error::Failed to create workflow run (HTTP $http_code)"
+            echo "Response: $body"
             exit 1
           fi
 
-          # Step 2: Start workflow run
-          echo "Starting workflow run..."
-          start_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
+      - name: Start workflow run
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.MASTRA_BASE_URL }}/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" \
             -d '{"inputData": {"branch": "main"}}')
 
-          start_code=$(echo "$start_response" | tail -n1)
-          start_body=$(echo "$start_response" | sed '$d')
-          echo "Start response: $start_body (HTTP $start_code)"
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
 
-          if [ "$start_code" -eq 200 ]; then
-            echo "✅ Successfully triggered knowledge ingestion workflow"
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Workflow started"
+          elif [ "$http_code" -eq 401 ] || [ "$http_code" -eq 403 ]; then
+            echo "::error::Authentication failed (HTTP $http_code). Check that RUNPOD_ASSISTANT_API_KEY is valid."
+            echo "Response: $body"
+            exit 1
+          elif [ "$http_code" -eq 404 ]; then
+            echo "::error::Workflow run not found (HTTP 404). The create step may have returned a stale run ID."
+            echo "Response: $body"
+            exit 1
           else
-            echo "❌ Failed to start workflow"
+            echo "::error::Failed to start workflow (HTTP $http_code)"
+            echo "Response: $body"
             exit 1
           fi
+
+      - name: Checkout (for helper scripts)
+        uses: actions/checkout@v4
+
+      - name: Poll for completion
+        run: |
+          STATUS_URL="${{ secrets.MASTRA_BASE_URL }}/api/workflows/ingestKnowledgeWorkflow/runs/$RUN_ID"
+          MAX_ATTEMPTS=60
+          ATTEMPT=0
+
+          echo "Polling workflow status..."
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+
+            response=$(curl -s -w "\n%{http_code}" "$STATUS_URL" \
+              -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}")
+
+            http_code=$(echo "$response" | tail -n1)
+            body=$(echo "$response" | sed '$d')
+
+            if [ "$http_code" -ne 200 ]; then
+              echo "::error::Failed to fetch workflow status (HTTP $http_code)"
+              echo "Response: $body"
+              exit 1
+            fi
+
+            status=$(echo "$body" | python3 -c "import sys,json; print(json.load(sys.stdin).get('status','unknown'))")
+
+            if [ "$status" = "success" ]; then
+              echo ""
+              echo "✅ Knowledge ingestion completed successfully"
+              echo ""
+              echo "$body" | python3 .github/scripts/print-ingestion-result.py
+              exit 0
+            elif [ "$status" = "failed" ]; then
+              echo ""
+              echo "::error::Knowledge ingestion failed"
+              echo "$body" | python3 .github/scripts/print-ingestion-result.py
+              exit 1
+            fi
+
+            echo "  [$ATTEMPT/$MAX_ATTEMPTS] Status: $status — waiting 5s..."
+            sleep 5
+          done
+
+          echo "::error::Workflow timed out after $((MAX_ATTEMPTS * 5))s. Run ID: $RUN_ID"
+          exit 1
