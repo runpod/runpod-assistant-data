@@ -1,1 +1,27 @@
-README
+# RunPod Assistant Data
+
+Knowledge base data repository for the RunPod Assistant. Changes to `knowledge/` or `scraped/` directories on `main` automatically trigger a Mastra knowledge ingestion workflow.
+
+## GitHub Actions Setup
+
+The workflow at `.github/workflows/trigger-knowledge-ingestion.yml` requires the following configuration in your GitHub repository settings.
+
+### 1. Repository Variable
+
+Go to **Settings > Secrets and variables > Actions > Variables** and add:
+
+| Name | Value |
+|------|-------|
+| `MASTRA_BASE_URL` | The base URL of your Mastra deployment (e.g. `https://runpod-assistant.mastra.cloud`) |
+
+### 2. Repository Secret
+
+Go to **Settings > Secrets and variables > Actions > Secrets** and add:
+
+| Name | Value |
+|------|-------|
+| `RUNPOD_ASSISTANT_API_KEY` | API key for authenticating with the Mastra workflow API |
+
+### 3. Triggering
+
+The workflow runs automatically when files under `knowledge/` or `scraped/` are pushed to `main`. It can also be triggered manually from the **Actions** tab via `workflow_dispatch`.

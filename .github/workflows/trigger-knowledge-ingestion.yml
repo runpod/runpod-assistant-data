@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Mastra Knowledge Ingestion Workflow
+        env:
+          MASTRA_BASE_URL: ${{ vars.MASTRA_BASE_URL }}
+          RUNPOD_ASSISTANT_API_KEY: ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}
         run: |
           # Generate a unique run ID
           RUN_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
@@ -22,9 +25,9 @@ jobs:
           # Step 1: Create workflow run
           echo "Creating workflow run..."
           create_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
+            "${MASTRA_BASE_URL}/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
+            -H "Authorization: Bearer ${RUNPOD_ASSISTANT_API_KEY}" \
             -d '{}')
 
           create_code=$(echo "$create_response" | tail -n1)
@@ -39,9 +42,9 @@ jobs:
           # Step 2: Start workflow run
           echo "Starting workflow run..."
           start_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
+            "${MASTRA_BASE_URL}/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
+            -H "Authorization: Bearer ${RUNPOD_ASSISTANT_API_KEY}" \
             -d '{"inputData": {"branch": "main"}}')
 
           start_code=$(echo "$start_response" | tail -n1)
