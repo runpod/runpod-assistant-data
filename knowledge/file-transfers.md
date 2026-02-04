@@ -4,7 +4,12 @@
 
 **SCP is the recommended way to transfer files**, but it requires SSH to be set up first.
 
-For a quick overview:
+**Use "SSH over exposed TCP"** (not proxy SSH) - it's shown in Connect → SSH and supports SCP/SFTP:
+```bash
+ssh root@<ip> -p <port> -i ~/.ssh/id_ed25519
+```
+
+Quick overview:
 - **Official Runpod templates** (like Runpod Pytorch) have openssh pre-installed and port 22 exposed
 - **If your SSH key is registered with Runpod**, it's auto-injected when the pod starts
 - **For running pods without SSH set up**, use the password script in the web terminal
@@ -18,14 +23,16 @@ For a quick overview:
 
 ### Understanding the Two SSH Methods
 
-Runpod offers **two ways to SSH into a pod**:
+Runpod offers **two ways to SSH into a pod** (shown in the Connect modal):
 
-| Method | Command Format | SCP/SFTP Support | Requirements |
-|--------|---------------|------------------|--------------|
-| **Proxy SSH** | `ssh podId@ssh.runpod.io -i ~/.ssh/key` | ❌ No | SSH key registered with Runpod |
-| **Direct TCP SSH** | `ssh root@<ip> -p <port> -i ~/.ssh/key` | ✅ Yes | TCP port 22 exposed |
+| Method | Command Format | SCP/SFTP | Recommendation |
+|--------|---------------|----------|----------------|
+| **SSH over exposed TCP** | `ssh root@<ip> -p <port> -i ~/.ssh/key` | ✅ Yes | **Recommended** |
+| **Proxy SSH** | `ssh podId@ssh.runpod.io -i ~/.ssh/key` | ❌ No | Limited - shell only |
 
-**Important:** For file transfers with SCP/SFTP, you need **Direct TCP SSH** (port 22 exposed).
+**Always recommend "SSH over exposed TCP"** - it supports SCP, SFTP, and has no limitations. The proxy SSH method is limited to shell access only (no file transfers).
+
+In the console, you'll see both options in the **Connect** → **SSH** tab. Use the "SSH over exposed TCP" command.
 
 ### What Official Templates Provide
 
@@ -62,11 +69,13 @@ Custom templates may not have these configured.
 
 ### Option A: Password Script (Running Pods, Quick Access)
 
-For quick SSH/SCP access to a **running pod**, use the password setup script:
+For quick SSH/SCP access to a **running pod**, use the password setup script. This is the recommended approach for running pods because it doesn't require a restart.
 
 **Requirements:**
-- TCP port 22 must be exposed (official templates have this)
+- TCP port 22 must be exposed (official templates have this by default)
 - Access to the pod's web terminal
+
+**Note:** If TCP port 22 is not exposed, you'll need to edit pod settings to add it - but editing ports will restart the pod.
 
 **Steps:**
 1. Open your pod's **web terminal** in the Runpod console
@@ -184,7 +193,9 @@ A few things to check:
 2. **Is your SSH key registered?** Check account settings → SSH Keys
 3. **Is the pod using an official template?** Custom templates may not have openssh installed
 
-**Quick workaround:** If you have web terminal access, use the password script (Option A above).
+**If TCP port 22 is not exposed**, you have two options:
+- **Edit pod settings to expose port 22** - Note: editing ports will restart the pod
+- **Use the password script** (if you have web terminal access) - This is a one-time setup that works immediately without restart (see Option A above)
 
 ### "How do I set up SSH keys?"
 
@@ -196,8 +207,13 @@ Which would you prefer? Let me know your situation and I can give specific steps
 
 ### "Proxy SSH vs Direct TCP SSH - what's the difference?"
 
-- **Proxy SSH** (`ssh podId@ssh.runpod.io`): Works on all pods, but NO SCP/SFTP support. Good for shell access only.
-- **Direct TCP SSH** (`ssh root@ip -p port`): Requires TCP port 22 exposed, but supports SCP/SFTP. Needed for file transfers.
+**Always use "SSH over exposed TCP" (direct) when available:**
+- `ssh root@<ip> -p <port>` - Full SSH with SCP/SFTP support
+- Found in Connect → SSH → "SSH over exposed TCP"
+
+**Proxy SSH is limited:**
+- `ssh podId@ssh.runpod.io` - Shell access only, NO SCP/SFTP
+- Only use this if direct TCP isn't available
 
 ---
 
