@@ -19,7 +19,7 @@ scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
 **If you haven't set up SSH yet, let me know and I can walk you through either method.**
 
 **Alternative if SSH isn't working:**
-- **runpodctl** - Pre-installed on official Runpod templates (or templates based on them). Simple send/receive model, no SSH needed.
+- **runpodctl** - Pre-installed on Runpod's official templates (like Runpod Pytorch) or templates based on them. Simple send/receive model, no SSH needed.
 
 ---
 
@@ -92,7 +92,7 @@ See: https://docs.runpod.io/pods/configuration/use-ssh#password-based-ssh
 
 ## Method 2: runpodctl (Alternative)
 
-If SSH isn't working or you prefer a simpler tool, use `runpodctl`. It's **pre-installed on official Runpod templates** (like PyTorch, Stable Diffusion) and templates based on them. If you're using a custom template, runpodctl may not be available.
+If SSH isn't working or you prefer a simpler tool, use `runpodctl`. It's **pre-installed on Runpod's official templates** (like Runpod Pytorch) and templates based on them. If you're using a custom template, runpodctl may not be available.
 
 ```bash
 # On your LOCAL machine, install runpodctl first:
@@ -107,11 +107,11 @@ runpodctl receive abc123
 ```
 
 **When to use runpodctl:**
-- You're using an official template (or one based on it) and want a simple transfer method
+- You're using a Runpod official template like Runpod Pytorch (or one based on it) and want a simple transfer method
 - You're less comfortable with SSH commands
 - Quick one-off transfers without worrying about connection details
 
-**Note:** runpodctl is only available on official Runpod templates or templates based on them. Custom templates may not have it installed.
+**Note:** runpodctl is only available on Runpod's official templates (like Runpod Pytorch) or templates based on them. Custom templates may not have it installed.
 
 ## Method 3: Setting Up SSH Keys (For Permanent/Repeated Access)
 
