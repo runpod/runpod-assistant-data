@@ -1,22 +1,51 @@
 # File Transfers to and from Pods
 
-## Overview
+## TL;DR
 
-This document covers common methods for transferring files to/from Runpod pods, including runpodctl, SSH/SCP, and best practices for data management.
+**Use SCP over passwordless SSH.** Official Runpod templates have SSH pre-configured - just grab the SSH command from your pod's connection info and use SCP:
 
-## Quick Recommendation
+```bash
+# Copy file to pod
+scp -P <port> /local/file.txt root@<pod-ip>:/workspace/
 
-**For users who want the easiest option, runpodctl is recommended.** It's pre-installed on all official Runpod templates and requires no SSH knowledge.
+# Copy file from pod
+scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
+```
 
-**For more technical users who want more control, SCP (over passwordless SSH) is a great choice.** It uses standard tools and works immediately with official Runpod templates.
+**Alternative:** If you're less familiar with SSH or it's not working, try `runpodctl` - it's pre-installed on pods and uses a simple send/receive model.
+
+---
 
 ## Before Helping with File Transfers
 
-**Important:** Ask the user if they are using an official Runpod template or a custom template. Official templates have networking and ports pre-configured correctly. Custom templates may require additional setup for SSH access.
+**Important:** Ask the user if they are using an official Runpod template or a custom template. Official templates have SSH and networking pre-configured. Custom templates may require additional setup.
 
-## Method 1: runpodctl (Easiest)
+## Method 1: SCP over Passwordless SSH (Recommended)
 
-runpodctl is Runpod's CLI tool for file transfers. **It's pre-installed on all official Runpod templates**, making it the easiest option for most users.
+For official Runpod templates, passwordless SSH works out of the box:
+
+1. **Get the SSH command** from your pod's connection info in the console
+2. **Use SCP to transfer files:**
+   ```bash
+   # From local to pod
+   scp -P <port> /local/path/file.txt root@<pod-ip>:/workspace/
+
+   # From pod to local
+   scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
+
+   # Copy entire folder
+   scp -rP <port> /local/folder root@<pod-ip>:/workspace/
+   ```
+
+**Why SCP is recommended:**
+- Works immediately with official templates (no setup needed)
+- Full control over transfers (wildcards, recursive, etc.)
+- Standard tool - integrates with scripts and automation
+- Familiar to most developers
+
+## Method 2: runpodctl (Alternative)
+
+If SSH isn't working or you prefer a simpler tool, use `runpodctl`. It's pre-installed on all official templates.
 
 ```bash
 # On your LOCAL machine, install runpodctl first:
@@ -30,35 +59,14 @@ runpodctl send /local/path/file.txt
 runpodctl receive abc123
 ```
 
-**Why use runpodctl:**
-- Pre-installed on official templates - no setup needed on the pod
-- Simple send/receive model - no SSH knowledge required
-- Works even if SSH ports aren't configured properly
-
-**Note:** You only need to install runpodctl on your local machine. The pod already has it.
-
-## Method 2: Passwordless SSH with SCP (For Technical Users)
-
-For users comfortable with SSH, SCP offers more control and flexibility:
-
-1. **Get the SSH command** from the pod's connection info in the console
-2. **Use SCP to transfer files:**
-   ```bash
-   # From local to pod
-   scp -P <port> /local/path/file.txt root@<pod-ip>:/workspace/
-
-   # From pod to local
-   scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
-   ```
-
-**Why use SCP:**
-- More control over file transfers (wildcards, recursive copies, etc.)
-- Familiar to developers who already use SSH
-- Can integrate into scripts and automation
+**When to use runpodctl:**
+- SSH ports aren't configured (custom templates)
+- You're less comfortable with SSH commands
+- Quick one-off transfers without worrying about connection details
 
 ## Method 3: Setting Up SSH Keys
 
-Users can set up SSH keys for passwordless authentication, but there are important caveats:
+Users can set up SSH keys for key-based authentication, but there are important caveats:
 
 1. **Requires pod restart** - Adding SSH keys to the pod configuration requires restarting the pod
 2. **Data loss risk** - Any data NOT in `/workspace` will be lost on restart
@@ -86,7 +94,7 @@ For official templates:
 
 ## Networking and Port Configuration
 
-**For official templates:** Ports are pre-configured. SSH should work out of the box.
+**For official templates:** SSH and ports are pre-configured. SCP should work immediately.
 
 **For custom templates:** Users may need to:
 - Expose the correct ports (typically 22 for SSH)
@@ -101,21 +109,21 @@ If a user has a custom template with networking issues, recommend:
 ## Common Scenarios
 
 ### "How do I transfer files to my pod?"
-→ Recommend runpodctl first (easiest). If they're more technical and want more control, suggest SCP.
+→ Recommend SCP (works out of the box with official templates). If SSH isn't working, suggest runpodctl as alternative.
 
 ### "How do I migrate data between pods?"
-→ Use a network volume for persistent shared storage, or use runpodctl/SCP to download locally then upload to new pod.
+→ Use a network volume for persistent shared storage, or use SCP/runpodctl to download locally then upload to new pod.
 
 ### "I can't SSH into my pod"
-→ Suggest runpodctl as it doesn't require SSH. If using a custom template, ports may not be configured.
+→ Check if using official template. If custom, ports may not be configured. Suggest runpodctl as alternative since it doesn't require SSH.
 
 ### "I lost my data after restarting"
 → Data outside `/workspace` is not persistent. Always save important files to `/workspace` or attach a network volume.
 
 ## Best Practices
 
-1. **Use official templates when possible** - They have runpodctl pre-installed and networking pre-configured
+1. **Use official templates when possible** - They have SSH and networking pre-configured
 2. **Always save data to /workspace** - This persists across pod restarts
 3. **Consider network volumes** - For data that needs to persist across different pods
-4. **Start with runpodctl** - It's the simplest option for most users
-5. **Early decisions matter** - If users are just starting, recommend official templates with proper networking rather than debugging custom setups
+4. **Start with SCP** - It's the standard tool and works immediately on official templates
+5. **Fall back to runpodctl** - If SSH isn't working or you want something simpler
