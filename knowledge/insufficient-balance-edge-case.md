@@ -8,13 +8,13 @@ Users may see an "insufficient balance" error when trying to purchase a savings 
 
 ## Why This Happens
 
-A small additional buffer is required beyond the displayed plan price. This buffer accounts for:
+Even a difference of just a few cents can prevent the purchase from going through. The account balance cannot be exactly equal to the plan price because users must also cover:
 
-1. **Extra storage costs** - Pod storage may incur additional charges beyond the base plan price
+1. **Storage costs** - Pod storage incurs additional charges beyond the base plan price. The savings plan only covers GPU compute, not storage, so users need extra balance to cover their storage allocation.
 2. **Per-hour rounding** - Minor rounding in per-hour billing calculations can create small overages
 3. **Safety margin** - The system requires a small buffer to ensure the plan can be fulfilled without interruption
 
-The account balance cannot be exactly equal to the plan price - users need to add a small amount extra (typically $5-20 depending on the plan size).
+Users need to add a small amount extra beyond the displayed plan price (typically $10-20 depending on the plan size and storage needs).
 
 ## Important Clarification
 
