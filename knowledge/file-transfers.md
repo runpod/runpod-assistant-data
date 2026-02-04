@@ -27,24 +27,62 @@ scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
 
 **Important:** Ask the user if they are using an official Runpod template or a custom template. Official templates have SSH and networking pre-configured. Custom templates may require additional setup.
 
-## Understanding SSH Options: Password-based vs SSH Keys
+## IMPORTANT: SSH/SCP Prerequisites
 
-When using SSH/SCP with Runpod pods, there are **two approaches** - ALWAYS mention both when users ask about SSH:
+**SSH and SCP require authentication to be set up first.** Before users can SSH or SCP into their pod, they need ONE of these:
 
-| Approach | Setup | Best For |
-|----------|-------|----------|
-| **Password-based SSH** | Run a script in pod terminal | Quick setup, one-time access, running pods |
-| **SSH Key authentication** | Add key to account + pod restart | Permanent access, frequent connections |
+### Decision Tree: How to Set Up SSH Access
 
-### IMPORTANT: When users ask about SSH or SSH keys
+**Ask the user these questions to guide them:**
 
-**Many users don't realize password-based SSH is quick to set up.** When answering SSH questions:
+1. **Is your pod currently running?**
+   - YES → Options A, B, or C below
+   - NO (creating new pod) → Option D is easiest
 
-1. **First, mention password-based SSH** - Users can run a simple script in their pod's web terminal that sets up SSH with a password. No keys needed, no restart, works on running pods.
+2. **Do you need one-time or permanent access?**
+   - ONE-TIME → Option A (password) or Option B (manual key)
+   - PERMANENT → Option C (if running) or Option D (with restart)
 
-2. **Then explain SSH keys as an option** - For users who want permanent key-based authentication. Requires adding key to Runpod account and pod restart to inject keys.
+3. **Do you have access to the pod's web terminal?**
+   - YES → Options A, B, or C
+   - NO → Need to use Option D (requires restart)
 
-3. **Help them choose** - If they just need to transfer files or SSH in quickly, password-based is easier. If they'll connect frequently, SSH keys are worth the setup.
+### SSH Setup Options
+
+| Option | Method | Works on Running Pod? | Permanent? | Requires |
+|--------|--------|----------------------|------------|----------|
+| **A** | Password-based script | ✅ Yes | ❌ No (until restart) | Web terminal access |
+| **B** | Manually add key to ~/.ssh/authorized_keys | ✅ Yes | ❌ No (lost on restart) | Web terminal access |
+| **C** | Add key via SSH_PUBLIC_KEY env var | ❌ No (requires restart) | ✅ Yes | Pod restart |
+| **D** | Add key to Runpod account settings | ❌ No (requires restart) | ✅ Yes | Pod restart |
+
+### Option A: Password-based SSH (Quick, Running Pods)
+- Run setup script in web terminal
+- Get a password, use it to SSH/SCP
+- **Best for:** Quick one-time access, users who don't want to manage keys
+
+### Option B: Manual Key Injection (One-time, Running Pods)
+- Add your public key to `~/.ssh/authorized_keys` via web terminal
+- Works immediately, but lost on pod restart
+- **Best for:** One-time SSH access when you have your key handy
+
+### Option C: Environment Variable (Permanent, Requires Restart)
+- Set `SSH_PUBLIC_KEY` environment variable in pod settings
+- Requires pod restart to take effect
+- **Best for:** Permanent access, overriding account-level keys for specific pod
+
+### Option D: Account Settings (Permanent, Requires Restart)
+- Add key to Runpod account SSH settings
+- Key injected on pod start/restart
+- **Best for:** Permanent access across all pods
+
+### IMPORTANT: When users ask about SSH
+
+**Always clarify what they're trying to do and guide them to the right option:**
+
+1. "Do you need to SSH/SCP into your pod right now, or set up permanent access?"
+2. "Is your pod currently running? Do you have important data outside /workspace?"
+3. Based on answers, recommend the appropriate option above
 
 ---
 
@@ -188,17 +226,29 @@ Let me know if you need help setting up SSH, or if you'd prefer to use runpodctl
 ### "I can't SSH into my pod"
 → Check if using official template. If custom, ports may not be configured. Suggest runpodctl as alternative since it doesn't require SSH.
 
-### "How do I set up SSH keys for my pod?"
-→ First ask: do they actually need SSH keys, or just want to SSH/SCP into their pod?
-- **If they just want to connect:** Recommend password-based SSH - run the setup script in the pod's web terminal, get a password, and connect. No keys needed, works on running pods.
-- **If they need permanent key-based access:** Explain that SSH keys require adding key to Runpod account settings, then pod restart to inject the key. Warn about data loss outside /workspace on restart.
+### "How do I set up SSH for my pod?" or "How do I SSH into my pod?"
+→ **Ask clarifying questions first:**
+1. "Is your pod currently running, or are you setting up a new pod?"
+2. "Do you need quick one-time access, or permanent SSH access?"
+3. "Do you have important data on the pod outside of /workspace?"
 
-### "How do I SSH into my pod?"
-→ Two options:
-1. **Password-based SSH (quick)** - Run the setup script in your pod's web terminal. It gives you SSH/SCP commands with a password. Works on running pods, no restart needed.
-2. **SSH key authentication (permanent)** - Add your public key to Runpod account settings, restart pod. Better for frequent connections.
+**Then guide them based on answers:**
 
-Recommend password-based first unless they specifically need key-based auth.
+| Situation | Recommendation |
+|-----------|---------------|
+| Running pod, need quick access | **Password-based** (Option A) - run script in web terminal |
+| Running pod, have SSH key handy | **Manual key injection** (Option B) - add to authorized_keys |
+| Can restart pod, want permanent access | **Account settings** (Option D) - add key, restart pod |
+| Creating new pod | **Account settings** (Option D) - key injected on first start |
+
+**Always warn about restart risks:** If they need to restart, remind them that data outside `/workspace` will be lost.
+
+### "How do I set up SSH keys specifically?"
+→ Explain the two permanent options:
+1. **Account-level** - Add key to Runpod account settings, applies to all new pods
+2. **Pod-level** - Set `SSH_PUBLIC_KEY` env var for specific pod
+
+Both require pod restart. If pod is running with important data, suggest password-based or manual key injection as alternatives that don't require restart.
 
 ### "I lost my data after restarting"
 → Data outside `/workspace` is not persistent. Always save important files to `/workspace` or attach a network volume.
