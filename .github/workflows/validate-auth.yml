@@ -6,40 +6,16 @@ on:
       - main
 
 jobs:
-  validate-mastra-auth:
+  validate-auth:
     runs-on: ubuntu-latest
     steps:
-      - name: Check MASTRA_API_KEY exists
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Runpod Assistant authentication
         env:
-          MASTRA_API_KEY: ${{ secrets.MASTRA_API_KEY }}
+          RUNPOD_ASSISTANT_BASE_URL: ${{ secrets.RUNPOD_ASSISTANT_BASE_URL }}
+          RUNPOD_ASSISTANT_API_KEY: ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}
         run: |
-          if [ -z "$MASTRA_API_KEY" ]; then
-            echo "::error::MASTRA_API_KEY secret is not configured"
-            exit 1
-          fi
-          echo "✅ MASTRA_API_KEY secret is configured"
-
-      - name: Validate Mastra API authentication
-        env:
-          MASTRA_API_KEY: ${{ secrets.MASTRA_API_KEY }}
-        run: |
-          # Test authentication by checking if we can reach the workflow endpoint
-          response=$(curl -s -w "\n%{http_code}" \
-            "https://runpod-assistant.mastra.cloud/api/workflows" \
-            -H "Authorization: Bearer $MASTRA_API_KEY")
-
-          http_code=$(echo "$response" | tail -n1)
-          body=$(echo "$response" | sed '$d')
-
-          echo "Response: $body (HTTP $http_code)"
-
-          if [ "$http_code" -eq 401 ] || [ "$http_code" -eq 403 ]; then
-            echo "::error::MASTRA_API_KEY authentication failed - key may be invalid or expired"
-            exit 1
-          fi
-
-          if [ "$http_code" -ge 400 ]; then
-            echo "::warning::Mastra API returned HTTP $http_code - endpoint may be unavailable"
-          fi
-
-          echo "✅ Mastra API authentication successful"
+          chmod +x .github/scripts/validate-auth.sh
+          .github/scripts/validate-auth.sh
