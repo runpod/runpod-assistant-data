@@ -2,14 +2,12 @@
 
 ## TL;DR
 
-**For quick file transfers, use password-based SSH with SCP.** Run a setup script in your pod's web terminal, then use SCP from your local machine.
+**SCP is the recommended way to transfer files**, but it requires SSH to be set up first. There are two ways to set up SSH:
 
-In your pod's web terminal:
-```bash
-wget https://raw.githubusercontent.com/justinwlin/Runpod-SSH-Password/main/passwordrunpod.sh && chmod +x passwordrunpod.sh && ./passwordrunpod.sh
-```
+1. **Password-based SSH (quick)** - Run a script in your pod's web terminal, get a password, done
+2. **SSH key authentication (permanent)** - Add your key to Runpod account, requires pod restart
 
-Then from your local machine (using the connection info the script outputs):
+Once SSH is set up, use SCP from your local machine:
 ```bash
 # Copy file to pod
 scp -P <port> /local/file.txt root@<pod-ip>:/workspace/
@@ -18,9 +16,10 @@ scp -P <port> /local/file.txt root@<pod-ip>:/workspace/
 scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
 ```
 
-**Alternatives:**
-- **runpodctl** - If SSH isn't working or you prefer a simpler tool. Pre-installed on pods, simple send/receive model.
-- **SSH keys** - For permanent/repeated access. Requires adding key to Runpod account and pod restart.
+**If you haven't set up SSH yet, let me know and I can walk you through either method.**
+
+**Alternative if SSH isn't working:**
+- **runpodctl** - Pre-installed on official Runpod templates (or templates based on them). Simple send/receive model, no SSH needed.
 
 ---
 
@@ -93,7 +92,7 @@ See: https://docs.runpod.io/pods/configuration/use-ssh#password-based-ssh
 
 ## Method 2: runpodctl (Alternative)
 
-If SSH isn't working or you prefer a simpler tool, use `runpodctl`. It's pre-installed on all official templates.
+If SSH isn't working or you prefer a simpler tool, use `runpodctl`. It's **pre-installed on official Runpod templates** (like PyTorch, Stable Diffusion) and templates based on them. If you're using a custom template, runpodctl may not be available.
 
 ```bash
 # On your LOCAL machine, install runpodctl first:
@@ -108,9 +107,11 @@ runpodctl receive abc123
 ```
 
 **When to use runpodctl:**
-- SSH ports aren't configured (custom templates)
+- You're using an official template (or one based on it) and want a simple transfer method
 - You're less comfortable with SSH commands
 - Quick one-off transfers without worrying about connection details
+
+**Note:** runpodctl is only available on official Runpod templates or templates based on them. Custom templates may not have it installed.
 
 ## Method 3: Setting Up SSH Keys (For Permanent/Repeated Access)
 
@@ -173,7 +174,13 @@ If a user has a custom template with networking issues, recommend:
 ## Common Scenarios
 
 ### "How do I transfer files to my pod?"
-→ Recommend SCP (works out of the box with official templates). If SSH isn't working, suggest runpodctl as alternative.
+→ Recommend SCP, but **always clarify that SCP requires SSH to be set up first**. After explaining SCP, add:
+
+"SCP requires SSH to be configured. If you haven't set up SSH yet, there are two options:
+1. **Password-based SSH** (quick) - Run a setup script in your pod's web terminal
+2. **SSH key authentication** (permanent) - Add your key to Runpod account, requires pod restart
+
+Let me know if you need help setting up SSH, or if you'd prefer to use runpodctl which doesn't require SSH."
 
 ### "How do I migrate data between pods?"
 → Use a network volume for persistent shared storage, or use SCP/runpodctl to download locally then upload to new pod.
