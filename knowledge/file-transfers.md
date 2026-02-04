@@ -29,7 +29,11 @@ scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
 
 ## IMPORTANT: SSH/SCP Prerequisites
 
-**SSH and SCP require authentication to be set up first.** Before users can SSH or SCP into their pod, they need ONE of these:
+**SSH and SCP have two prerequisites:**
+
+1. **TCP port 22 must be exposed** - This gives your pod a public IP address. Official Runpod templates (like Runpod Pytorch) have this pre-configured. For custom templates, add `22` to the "Expose TCP Ports" field in pod settings (requires restart).
+
+2. **Authentication must be set up** - Either password-based or SSH key. See options below.
 
 ### Decision Tree: How to Set Up SSH Access
 
@@ -91,9 +95,14 @@ scp -P <port> root@<pod-ip>:/workspace/file.txt /local/path/
 For quick SSH/SCP access to a running pod, use the **password-based SSH setup script**. This is the recommended method for one-time or occasional file transfers.
 
 ### Requirements:
-- Pod must have a **public IP address**
-- Pod must **expose TCP port 22**
-- Official Runpod templates (like PyTorch, Stable Diffusion) have this pre-configured
+- Pod must have **TCP port 22 exposed** (this gives you a public IP)
+- Runpod's official templates (like Runpod Pytorch) have this pre-configured
+
+### How to expose TCP port 22 (if not already configured):
+1. Go to the [Runpod Console](https://console.runpod.io/) → your pod → **Edit Pod**
+2. In the **Expose TCP Ports** field, add `22`
+3. Save - **this will restart your pod** (data outside /workspace is lost)
+4. After restart, check the **Connect** menu for your public IP and mapped port (e.g., `213.173.109.39:13007 -> :22`)
 
 ### Steps:
 1. **Open your pod's web terminal** in the Runpod console
