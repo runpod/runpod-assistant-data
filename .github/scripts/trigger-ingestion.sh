@@ -8,7 +8,7 @@ echo "Run ID: $RUN_ID"
 # Step 1: Create workflow run
 echo "Creating workflow run..."
 create_response=$(curl -s -w "\n%{http_code}" -X POST \
-  "${RUNPOD_ASSISTANT_BASE_URL}/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
+  "${RUNPOD_ASSISTANT_API_URL}/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $RUNPOD_ASSISTANT_API_KEY" \
   -d '{}')
@@ -25,7 +25,7 @@ fi
 # Step 2: Start workflow run
 echo "Starting workflow run..."
 start_response=$(curl -s -w "\n%{http_code}" -X POST \
-  "${RUNPOD_ASSISTANT_BASE_URL}/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
+  "${RUNPOD_ASSISTANT_API_URL}/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $RUNPOD_ASSISTANT_API_KEY" \
   -d '{"inputData": {"branch": "main"}}')

@@ -18,7 +18,7 @@ jobs:
 
       - name: Trigger knowledge ingestion workflow
         env:
-          RUNPOD_ASSISTANT_BASE_URL: ${{ secrets.RUNPOD_ASSISTANT_BASE_URL }}
+          RUNPOD_ASSISTANT_API_URL: ${{ secrets.RUNPOD_ASSISTANT_API_URL }}
           RUNPOD_ASSISTANT_API_KEY: ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}
         run: |
           chmod +x .github/scripts/trigger-ingestion.sh

@@ -5,7 +5,7 @@ set -e
 validate_env_vars() {
   local missing=""
 
-  [ -z "$RUNPOD_ASSISTANT_BASE_URL" ] && missing="$missing RUNPOD_ASSISTANT_BASE_URL"
+  [ -z "$RUNPOD_ASSISTANT_API_URL" ] && missing="$missing RUNPOD_ASSISTANT_API_URL"
   [ -z "$RUNPOD_ASSISTANT_API_KEY" ] && missing="$missing RUNPOD_ASSISTANT_API_KEY"
 
   if [ -n "$missing" ]; then
@@ -18,10 +18,10 @@ validate_env_vars() {
 
 # Test authentication against the Runpod Assistant API
 validate_auth() {
-  echo "Testing authentication against $RUNPOD_ASSISTANT_BASE_URL..."
+  echo "Testing authentication against $RUNPOD_ASSISTANT_API_URL..."
 
   response=$(curl -s -w "\n%{http_code}" \
-    "${RUNPOD_ASSISTANT_BASE_URL}/api/workflows" \
+    "${RUNPOD_ASSISTANT_API_URL}/api/workflows" \
     -H "Authorization: Bearer $RUNPOD_ASSISTANT_API_KEY")
 
   http_code=$(echo "$response" | tail -n1)
