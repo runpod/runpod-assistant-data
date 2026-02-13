@@ -1,0 +1,46 @@
+# .arch/repo.yaml
+# Architecture metadata for runpod-assistant-data
+# Auto-discovered by architecture-reference build-db.ts
+
+schema_version: "1"
+
+meta:
+  service_id: runpod-assistant-data
+  name: Runpod Assistant Knowledge Base
+  team: devrel
+  purpose: Curated knowledge base and scraped content for RAG ingestion into runpod-assistant
+  repo: runpod/runpod-assistant-data
+
+ownership:
+  team: devrel
+  slack_channel: "#alerts-runpod-assistant"
+  escalation_path:
+    - devrel
+
+handlers:
+  - event: push to main
+    type: github_action
+    file: .github/workflows/
+    notes: GitHub Action triggers ingestion workflow in runpod-assistant on push to main
+
+conventions:
+  - category: data
+    rule: Knowledge files in knowledge/ are curated markdown (9 files covering support gaps, troubleshooting)
+    rationale: Human-curated content fills gaps not covered by official docs
+
+  - category: data
+    rule: Scraped files in scraped/ are JSON (~540 files, ~77MB from runpod.io and blog)
+    rationale: Automated scrape for broader coverage
+
+  - category: deploy
+    rule: Push to main triggers ingestion - no manual deployment needed
+    rationale: GitHub Action automates the pipeline
+
+key_files:
+  - path: knowledge/
+    purpose: Curated markdown knowledge files (support gaps, troubleshooting)
+    category: data
+
+  - path: scraped/
+    purpose: Scraped JSON files from runpod.io and blog
+    category: data
