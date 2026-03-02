@@ -1,6 +1,9 @@
-name: Trigger Knowledge Ingestion
+name: Knowledge Ingestion
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -10,47 +13,55 @@ on:
   workflow_dispatch: # Allow manual trigger
 
 jobs:
-  trigger-ingestion:
+  health-check:
+    name: Assistant health check
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Mastra Knowledge Ingestion Workflow
+      - name: Verify assistant API key and endpoint health
         run: |
-          # Generate a unique run ID
-          RUN_ID=$(uuidgen | tr '[:upper:]' '[:lower:]')
-          echo "Run ID: $RUN_ID"
+          response=$(curl -s -w "\n%{http_code}" -X GET \
+            "${{ secrets.RUNPOD_ASSISTANT_API_URL }}/api/health?detailed=true" \
+            -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}")
 
-          # Step 1: Create workflow run
-          echo "Creating workflow run..."
-          create_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/create-run?runId=$RUN_ID" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
-            -d '{}')
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          echo "Response: $body (HTTP $http_code)"
 
-          create_code=$(echo "$create_response" | tail -n1)
-          create_body=$(echo "$create_response" | sed '$d')
-          echo "Create response: $create_body (HTTP $create_code)"
-
-          if [ "$create_code" -ne 200 ]; then
-            echo "❌ Failed to create workflow run"
+          if [ "$http_code" -eq 200 ]; then
+            echo "Assistant is healthy — API key valid, ingestion will work on merge"
+          elif [ "$http_code" -eq 401 ]; then
+            echo "RUNPOD_ASSISTANT_API_KEY secret is missing or invalid"
+            exit 1
+          else
+            echo "Assistant health check failed"
             exit 1
           fi
 
-          # Step 2: Start workflow run
-          echo "Starting workflow run..."
-          start_response=$(curl -s -w "\n%{http_code}" -X POST \
-            "https://runpod-assistant.mastra.cloud/api/workflows/ingestKnowledgeWorkflow/start?runId=$RUN_ID" \
+  trigger-ingestion:
+    name: Trigger ingestion
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger v2 Knowledge Ingestion
+        run: |
+          echo "Triggering knowledge ingestion..."
+
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.RUNPOD_ASSISTANT_API_URL }}/api/ingest" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.MASTRA_API_KEY }}" \
-            -d '{"inputData": {"branch": "main"}}')
+            -H "Authorization: Bearer ${{ secrets.RUNPOD_ASSISTANT_API_KEY }}" \
+            -d '{"source": "knowledge"}')
 
-          start_code=$(echo "$start_response" | tail -n1)
-          start_body=$(echo "$start_response" | sed '$d')
-          echo "Start response: $start_body (HTTP $start_code)"
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+          echo "Response: $body (HTTP $http_code)"
 
-          if [ "$start_code" -eq 200 ]; then
-            echo "✅ Successfully triggered knowledge ingestion workflow"
+          if [ "$http_code" -eq 200 ]; then
+            echo "Successfully triggered knowledge ingestion"
+          elif [ "$http_code" -eq 409 ]; then
+            echo "Ingestion already running — skipping"
           else
-            echo "❌ Failed to start workflow"
+            echo "Failed to trigger ingestion"
             exit 1
           fi
