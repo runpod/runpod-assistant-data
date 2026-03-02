@@ -28,15 +28,23 @@ jobs:
           body=$(echo "$response" | sed '$d')
           echo "Response: $body (HTTP $http_code)"
 
-          if [ "$http_code" -eq 200 ]; then
-            echo "Assistant is healthy — API key valid, ingestion will work on merge"
-          elif [ "$http_code" -eq 401 ]; then
-            echo "RUNPOD_ASSISTANT_API_KEY secret is missing or invalid"
-            exit 1
-          else
-            echo "Assistant health check failed"
+          if [ "$http_code" -ne 200 ]; then
+            if [ "$http_code" -eq 401 ]; then
+              echo "RUNPOD_ASSISTANT_API_KEY secret is missing or invalid"
+            else
+              echo "Assistant health check failed (HTTP $http_code)"
+            fi
             exit 1
           fi
+
+          status=$(echo "$body" | jq -r '.status // empty')
+          if [ "$status" != "ok" ]; then
+            echo "Assistant is degraded — status: $status"
+            echo "$body" | jq .
+            exit 1
+          fi
+
+          echo "Assistant is healthy — API key valid, ingestion will work on merge"
 
   trigger-ingestion:
     name: Trigger ingestion
