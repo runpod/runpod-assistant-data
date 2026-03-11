@@ -16,6 +16,8 @@ Even a difference of just a few cents can prevent the purchase from going throug
 
 Users need to add a small amount extra beyond the displayed plan price (typically $10-20 depending on the plan size and storage needs).
 
+In some jurisdictions, sales tax may also be added on top of the displayed price, which can further widen the gap.
+
 ## Solution
 
 To resolve this issue, users should:
