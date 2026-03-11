@@ -16,10 +16,6 @@ Even a difference of just a few cents can prevent the purchase from going throug
 
 Users need to add a small amount extra beyond the displayed plan price (typically $10-20 depending on the plan size and storage needs).
 
-## Important Clarification
-
-The most common causes are the storage buffer and billing rounding described above. However, **taxes may also contribute** for users in taxed jurisdictions — Runpod does collect sales tax in applicable regions, which is added on top of the displayed plan price. If a user is in a taxed jurisdiction, the effective total will be higher than the listed price. In most cases the shortfall is due to the storage/rounding buffer, but do not rule out taxes as a contributing factor.
-
 ## Solution
 
 To resolve this issue, users should:
@@ -31,4 +27,4 @@ To resolve this issue, users should:
 
 If a user asks why they see "insufficient balance" when their balance matches the plan price:
 
-> The system requires a small buffer beyond the displayed plan price to account for potential storage costs and minor billing rounding. If you're in a taxed jurisdiction, sales tax is also added on top of the listed price. I recommend adding an extra $10-20 to your account balance and trying again.
+> The system requires a small buffer beyond the displayed plan price to account for storage costs and minor billing rounding. I recommend adding an extra $10-20 to your account balance and trying again.
