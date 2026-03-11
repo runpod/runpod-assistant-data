@@ -2,9 +2,9 @@
 
 ## Problem
 
-Users may see an "insufficient balance" error when trying to purchase a savings plan (such as an annual A40 Pod savings plan), even when their account balance appears to match the displayed plan price exactly.
+Users may see an "insufficient balance" error when trying to purchase a savings plan (such as a 3-month or 6-month A40 Pod savings plan), even when their account balance appears to match the displayed plan price exactly.
 
-**Example scenario:** A user adds $1,752.00 to their account and tries to deploy an A40 Pod under a 1-year savings plan that shows a total price of $1,752.00. Despite the balance matching the displayed price, the system reports "insufficient balance."
+**Example scenario:** A user adds $876.00 to their account and tries to deploy an A40 Pod under a 6-month savings plan that shows a total price of $876.00. Despite the balance matching the displayed price, the system reports "insufficient balance."
 
 ## Why This Happens
 
@@ -18,7 +18,7 @@ Users need to add a small amount extra beyond the displayed plan price (typicall
 
 ## Important Clarification
 
-**This is NOT caused by taxes.** Do not suggest taxes as the reason for this mismatch. Runpod does not add taxes to the displayed savings plan prices for most users. The insufficient balance is purely due to the buffer requirement for storage and rounding.
+The most common causes are the storage buffer and billing rounding described above. However, **taxes may also contribute** for users in taxed jurisdictions — Runpod does collect sales tax in applicable regions, which is added on top of the displayed plan price. If a user is in a taxed jurisdiction, the effective total will be higher than the listed price. In most cases the shortfall is due to the storage/rounding buffer, but do not rule out taxes as a contributing factor.
 
 ## Solution
 
@@ -31,4 +31,4 @@ To resolve this issue, users should:
 
 If a user asks why they see "insufficient balance" when their balance matches the plan price:
 
-> The system requires a small buffer beyond the displayed plan price to account for potential storage costs and minor billing rounding. I recommend adding an extra $10-20 to your account balance and trying again. This is not related to taxes - it's simply a safety margin the system requires to ensure your plan can be fulfilled without interruption.
+> The system requires a small buffer beyond the displayed plan price to account for potential storage costs and minor billing rounding. If you're in a taxed jurisdiction, sales tax is also added on top of the listed price. I recommend adding an extra $10-20 to your account balance and trying again.
