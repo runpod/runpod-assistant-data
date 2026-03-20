@@ -1,0 +1,95 @@
+We’ve recently seen increased demand for several GPU types, especially **NVIDIA 4090, A40, 5090, 3090, and A6000**. During peak periods, this can lead to lower available supply and longer queue times.
+
+We understand how important predictable GPU availability is for planning workloads and maintaining performance. This article answers some of the most common questions we’ve received.
+
+## Why are some GPUs harder to get right now?
+
+Over the last couple of weeks, supply for certain GPU types has been tighter throughout the day. This is mainly due to high demand, even though capacity is being upgraded every week for these specific cards.
+
+We regularly add new machines for these GPU types to increase capacity. However, availability is still offered on a **first come, first served** basis. If a specific GPU is unavailable when you need it, you may need to wait until capacity opens up again or replace your workflow with an alternate GPU.
+
+## When will supply stabilize?
+
+We have a dedicated team that reviews capacity, and it is assessed and upgraded every week.
+
+Demand can still vary by region and time of day, so some queueing may continue during high-traffic periods.
+
+## Are older GPU generations being phased out?
+
+There is no immediate plan to phase them out. Over time, newer GPU generations may naturally replace older ones. However, **older-generation GPUs are still safe to use for the foreseeable future** and are not being removed immediately.
+
+Customers currently using older GPU generations should not expect an abrupt phase-out, but it is a good idea to begin planning for upgrades where possible.
+
+*Note - If a card is phased out, it will no longer appear in the UI.*
+
+## Should I plan to move to newer GPUs?
+
+Yes. Our general recommendation is that users should aim to move to **newer GPU generations over time**, especially when using **consumer-grade cards**.
+
+There are two main reasons for this:
+
+- **Supply at scale is harder to maintain for consumer GPUs, as demand may increase or decrease at any time**
+- **NVIDIA eventually stops manufacturing older generations**
+
+Because of this, older cards can become more difficult to source over time, especially during periods of high demand.
+
+## What should I do if my preferred GPU is unavailable?
+
+If the exact GPU you want is not available, you can wait for capacity to open up. Since allocation works on a **first come, first served** basis, availability may return later as workloads complete and machines free up.
+
+If there is no important data stored on your previous pod, or if an alternate GPU is available, please consider creating a new pod if you cannot wait.
+
+For the best flexibility, we strongly recommend designing workflows so they are not tied to one specific GPU type unless absolutely necessary.
+
+## Best practice: use Network Volumes for your data
+
+The best way to reduce disruption from GPU supply changes is to store your data on **Network Volumes** rather than on a GPU instance’s local storage.
+
+This allows you to:
+
+- move between different available GPU types more easily
+- continue running workloads without being blocked by one specific card
+- avoid losing momentum when a particular GPU type is temporarily unavailable
+
+If your workflow depends on data stored directly on a GPU’s local storage, you may be forced to wait longer for that exact GPU type to become available again. This can be especially difficult when supply is constrained or when demand is high in your region or time zone.
+
+Using Network Volumes gives you more flexibility to take advantage of any suitable GPU that is available.
+
+## Recommended approach
+
+To improve reliability and reduce queue-related issues, we recommend that customers:
+
+- plan gradual upgrades to newer GPU generations
+- avoid depending on a single older or consumer-grade GPU type
+- store workflow data on Network Volumes instead of local GPU storage
+- be prepared to use equivalent newer GPUs when available
+
+## Summary
+
+Older GPU generations are still supported and safe to use for now, but customers should begin planning to adopt newer cards over time.
+
+We also continue to add new machines regularly, but capacity is still distributed on a **first come, first served** basis. To stay flexible, we strongly recommend using **Network Volumes** so your workloads can move more easily between available GPU types.
+
+---
+
+## FAQs
+
+### Why is GPU supply limited for some NVIDIA cards?
+
+These GPUs are in high demand, and during peak hours they are often fully booked by other users.
+
+### Are older GPUs being phased out?
+
+Older GPU generations are still safe to use for now, but over time newer cards will naturally replace them. Customers should begin planning to move to newer GPUs over time.
+
+### Why should I move to newer GPUs?
+
+Older consumer GPUs become harder to source at scale, and NVIDIA eventually stops manufacturing older generations.
+
+### What if the GPU I need is unavailable?
+
+We regularly add new machines, but availability is still **first come, first served**. If a GPU is unavailable, you may need to wait for capacity to return, or you can create a new pod with an alternate GPU.
+
+### What is the best way to avoid disruption?
+
+Store your data on **Network Volumes** instead of local GPU storage. This makes it easier to switch to another available GPU and continue your workflows without waiting for a specific card type.
