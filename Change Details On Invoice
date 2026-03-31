@@ -1,0 +1,43 @@
+How to Update Invoice Details in Runpod
+
+Runpod provides a self-serve way to update the details shown on your invoices when you load funds through the platform.
+
+Updating the name on your invoice
+
+You can update the name that appears on your invoices by going to Settings → Account Information:
+
+https://console.runpod.io/user/settings
+
+In the Account Information section, replace your current name with your company name if needed.
+
+After saving the change, go to Billing → Recent Transactions:
+
+https://console.runpod.io/user/billing
+
+From there, locate the Invoice column and download the invoice again. The updated name should now appear on the invoice.
+
+Important note about invoice details
+
+Please note that the information entered in the Account Information section will appear on your invoices exactly as provided. Any updates made there will be reflected across all invoices available on your account.
+
+Adding tax ID, city, and state
+
+You can include your tax ID in the available tax fields.
+
+For city and state, these cannot be added separately at this time. Please include them in Address field 2 instead.
+
+If the invoice still shows an error
+
+If you notice an error on the invoice after updating your details and downloading it again, please contact the Runpod support team for further assistance.
+
+VAT information
+
+As a United States-based company, Runpod does not collect VAT and is therefore unable to provide invoices that include VAT. This is in accordance with U.S. tax regulations and our company’s operational structure.
+
+Please note that responsibility for handling VAT-related matters remains with the customer, based on the regulations in their local jurisdiction. We recommend consulting your local tax authority or a qualified tax professional to ensure compliance with any VAT obligations in your region.
+
+We understand this may require additional steps on your part, and we apologize for any inconvenience. Runpod will continue to provide detailed invoices that meet U.S. standards and include the necessary information for your records.
+
+Need more help?
+
+If you have any further questions or need additional clarification, please reach out to our customer support team. We’re happy to assist within the scope of our capabilities.
