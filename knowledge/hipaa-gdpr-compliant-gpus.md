@@ -135,3 +135,5 @@ You can get started under Runpod's standard terms and review the published compl
 If your organization requires a **BAA**, **DPA**, or other custom legal agreement, please note that execution of custom agreements is reserved for customers with a **committed monthly spend of $3,000 or more**. If you are eligible, please reach the **Account Management team** by visiting the **Talk to Sales** button on the bottom-right side of the Runpod dashboard.
 
 For support, click **Help and Resources → Support** in the Runpod dashboard.
+
+Resource - https://contact.runpod.io/hc/en-us/articles/50120688006163-How-to-Find-HIPAA-GDPR-Compliant-GPUs-on-Runpod-and-Understand-BAA-Policy
