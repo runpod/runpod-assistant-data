@@ -1,6 +1,7 @@
-Why do I see a double charge on my card when Runpod only charged me once?
+# Why do I see a double charge on my card when Runpod only charged me once?
 
-Overview -
+## Overview
+
 If your bank statement appears to show that you were charged twice, but Runpod only processed one payment, this is usually caused by how your bank displays card transactions rather than an actual duplicate charge.
 
 ## What usually causes this?
@@ -41,7 +42,7 @@ No action is usually needed. Pending authorization holds normally disappear on t
 
 ### If both charges are posted
 
-If both charges remain fully posted after **5–10 business days**, please contact your bank first. In many cases, the issue is caused by your bank displaying the transaction incorrectly or not yet clearing the authorization hold.
+If both charges remain fully posted after **5-10 business days**, please contact your bank first. In many cases, the issue is caused by your bank displaying the transaction incorrectly or not yet clearing the authorization hold.
 
 ### If you still believe there is a true duplicate charge
 
@@ -61,12 +62,10 @@ Runpod only sees charges that were successfully processed through our payment pr
 
 Reach out to Runpod Support if:
 
-- Both charges are fully posted after 5–10 business days
+- Both charges are fully posted after 5-10 business days
 - The duplicate entry does not disappear
 - You want us to verify the payment details on our side
 
-We’re happy to help review the transaction with you.
+We're happy to help review the transaction with you.
 
-For support, login to your account - click Help and Resources → Support in the Runpod dashboard. Our teams are here to assist you further.
-
-Resource - https://contact.runpod.io/hc/en-us/articles/50093541930259-Why-do-I-see-a-double-charge-on-my-card-when-Runpod-only-charged-me-once
+For support, click **Help and Resources → Support** in the Runpod dashboard.
