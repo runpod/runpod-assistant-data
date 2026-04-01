@@ -1,14 +1,14 @@
-How to Find HIPAA/GDPR-Compliant GPUs on Runpod and Understand BAA Policy
+# How to find HIPAA/GDPR-compliant GPUs on Runpod and understand BAA policy
 
 ## Overview
 
 Runpod supports HIPAA/GDPR-compliant infrastructure options for both **Serverless** and **Pods**.
 
-Customers can use built-in filtering tools to find GPUs that are eligible for compliance-focused workloads, depending on the service they are using. This article explains how to locate those GPUs and outlines Runpod’s policy for signing a **Business Associate Agreement (BAA)**, **Data Processing Agreement (DPA)**, or other custom legal agreements.
+Customers can use built-in filtering tools to find GPUs that are eligible for compliance-focused workloads, depending on the service they are using. This article explains how to locate those GPUs and outlines Runpod's policy for signing a **Business Associate Agreement (BAA)**, **Data Processing Agreement (DPA)**, or other custom legal agreements.
 
 ---
 
-## How to Find HIPAA/GDPR-Compliant GPUs on Runpod
+## How to find HIPAA/GDPR-compliant GPUs on Runpod
 
 Runpod makes it easy to search for compliant GPUs across both supported deployment models:
 
@@ -19,7 +19,7 @@ The steps are slightly different for each service.
 
 ---
 
-## Find Compliant GPUs for Serverless
+## Find compliant GPUs for Serverless
 
 When creating a Serverless endpoint, you can filter available GPUs by compliance policy.
 
@@ -37,9 +37,10 @@ When creating a Serverless endpoint, you can filter available GPUs by compliance
 ### Navigation path
 
 **Endpoint Configurations → Advanced → Security & compliance**
+
 ---
 
-## Find Compliant GPUs for Pods
+## Find compliant GPUs for Pods
 
 When deploying a Pod, you can apply a compliance filter directly from the deployment page.
 
@@ -57,11 +58,11 @@ When deploying a Pod, you can apply a compliance filter directly from the deploy
 
 **Deploy Pod page → Additional filters → Security & compliance**
 
-You can select more than one compliance policies. 
+You can select more than one compliance policy.
 
 ---
 
-## Do You Need a BAA with Runpod?
+## Do you need a BAA with Runpod?
 
 If your organization needs Runpod to sign a **BAA**, **DPA**, or another custom legal agreement, there are specific eligibility requirements to keep in mind.
 
@@ -90,26 +91,24 @@ To help the team route your request properly, be prepared to share:
 
 ### If your projected usage is below $3,000/month
 
-If you are not yet at that threshold, the fastest way to get started is under Runpod’s standard terms.
+If you are not yet at that threshold, the fastest way to get started is under Runpod's standard terms.
 
 Runpod maintains a robust compliance program, and the resources below may address your requirements without the need for a separately negotiated agreement.
 
 ---
 
-## Helpful Compliance and Legal Resources
+## Helpful compliance and legal resources
 
-Customers can review the following resources for more information about Runpod’s compliance and security posture:
+Customers can review the following resources for more information about Runpod's compliance and security posture:
 
 - [**Runpod Trust Center**](https://trust.runpod.io/) — GDPR documentation, HIPAA compliance materials, SOC 2 Type II report, and more
 - [**Runpod Standard DPA**](https://www.runpod.io/legal/data-processing-agreement) — published Data Processing Agreement
 - [**Runpod Compliance Overview**](https://www.runpod.io/compliance)
 - [**Runpod Security Overview**](https://www.runpod.io/articles/guides/security-measures-ai-cloud-deployment)
 
-For consistency in your help center, these can be added as linked resource titles.
-
 ---
 
-## Frequently Asked Questions
+## Frequently asked questions
 
 ### Does Runpod support compliant GPU selection for both Serverless and Pods?
 
@@ -121,7 +120,7 @@ Yes. After you select the relevant compliance policy or certification, Runpod fi
 
 ### Do all customers need a BAA?
 
-Not always. Whether a BAA is required depends on your organization’s legal and compliance obligations.
+Not always. Whether a BAA is required depends on your organization's legal and compliance obligations.
 
 ### Can Runpod sign a BAA or custom DPA?
 
@@ -129,12 +128,12 @@ Yes, but execution of custom legal agreements is reserved for customers with a *
 
 ### What should I do if I am below the spend threshold?
 
-You can get started under Runpod’s standard terms and review the published compliance and legal resources listed above.
+You can get started under Runpod's standard terms and review the published compliance and legal resources listed above.
 
 ---
 
 If your organization requires a **BAA**, **DPA**, or other custom legal agreement, please note that execution of custom agreements is reserved for customers with a **committed monthly spend of $3,000 or more**. If you are eligible, please reach the **Account Management team** by visiting the **Talk to Sales** button on the bottom-right side of the Runpod dashboard.
 
-For support, click **Help and Resources → Support** in the Runpod dashboard. Our teams are here to assist you further.
+For support, click **Help and Resources → Support** in the Runpod dashboard.
 
 Resource - https://contact.runpod.io/hc/en-us/articles/50120688006163-How-to-Find-HIPAA-GDPR-Compliant-GPUs-on-Runpod-and-Understand-BAA-Policy

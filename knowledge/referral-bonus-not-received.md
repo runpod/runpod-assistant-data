@@ -1,3 +1,5 @@
+# Why didn't I receive my referral bonus?
+
 If you signed up using a referral link, clicked **Claim**, and completed the required deposit, but did not receive the referral bonus, there are a few common reasons this can happen.
 
 ## How referral bonuses work
@@ -29,7 +31,7 @@ This can happen when:
 
 - the referral link is opened, but registration is completed later
 - the browser session is interrupted
-- cookies are cleared or blocked by your browser extension or anti-virus softwares
+- cookies are cleared or blocked by your browser extension or anti-virus software
 - sign-up is completed in a different browser or device
 - the account is created outside the original referral flow
 

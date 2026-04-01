@@ -1,8 +1,10 @@
-We’ve recently seen increased demand for several GPU types, especially **NVIDIA 4090, A40, 5090, 3090, and A6000**. During peak periods, this can lead to lower available supply and longer queue times.
+# GPU supply availability
+
+We've recently seen increased demand for several GPU types, especially **NVIDIA 4090, A40, 5090, 3090, and A6000**. During peak periods, this can lead to lower available supply and longer queue times.
 
 Right now, demand for GPU compute across the industry is at an unprecedented level, especially with ongoing memory shortages. Our datacenter team is working around the clock to procure additional capacity in stable environments without compromising reliability.
 
-We understand how important predictable GPU availability is for planning workloads and maintaining performance. This article answers some of the most common questions we’ve received.
+We understand how important predictable GPU availability is for planning workloads and maintaining performance. This article answers some of the most common questions we've received.
 
 ## Why are some GPUs harder to get right now?
 
@@ -18,13 +20,13 @@ Demand can still vary by region and time of day, so some queueing may continue d
 
 ## Are older GPU generations being phased out?
 
-There is no immediate plan to phase them out. Over time, newer GPU generations may naturally replace older ones. However, **older-generation GPUs are still safe to use for the foreseeable future** and are not being removed immediately. However, older generation cards could possibly see supply constraints as we will focus on adding newer cards within our data-centers. 
+There is no immediate plan to phase them out. Over time, newer GPU generations may naturally replace older ones. However, **older-generation GPUs are still safe to use for the foreseeable future** and are not being removed immediately. However, older generation cards could possibly see supply constraints as we will focus on adding newer cards within our data-centers.
 
 The industry is increasingly investing in data-center class GPUs (such as RTX PRO 6000, H200, B200), so we expect supply constraints to ease sooner on those compared to consumer GPUs like RTX 4090 and 5090.
 
 Customers currently using older GPU generations should not expect an abrupt phase-out, but it is a good idea to begin planning for upgrades where possible.
 
-*Note - If a card is phased out, it will no longer appear in the UI.*
+*Note: if a card is phased out, it will no longer appear in the UI.*
 
 ## Should I plan to move to newer GPUs?
 
@@ -47,7 +49,7 @@ For the best flexibility, we strongly recommend designing workflows so they are 
 
 ## Best practice: use Network Volumes for your data
 
-The best way to reduce disruption from GPU supply changes is to store your data on **Network Volumes** rather than on a GPU instance’s local storage.
+The best way to reduce disruption from GPU supply changes is to store your data on **Network Volumes** rather than on a GPU instance's local storage.
 
 This allows you to:
 
@@ -55,7 +57,7 @@ This allows you to:
 - continue running workloads without being blocked by one specific card
 - avoid losing momentum when a particular GPU type is temporarily unavailable
 
-If your workflow depends on data stored directly on a GPU’s local storage, you may be forced to wait longer for that exact GPU type to become available again. This can be especially difficult when supply is constrained or when demand is high in your region or time zone.
+If your workflow depends on data stored directly on a GPU's local storage, you may be forced to wait longer for that exact GPU type to become available again. This can be especially difficult when supply is constrained or when demand is high in your region or time zone.
 
 Using Network Volumes gives you more flexibility to take advantage of any suitable GPU that is available.
 
@@ -67,7 +69,7 @@ To improve reliability and reduce queue-related issues, we recommend that custom
 - avoid depending on a single older or consumer-grade GPU type
 - store workflow data on Network Volumes instead of local GPU storage
 - be prepared to use equivalent newer GPUs when available
-- when possible, it is easier to ensure capacity when it is reserved in advance, and that is something our team can specifically plan for when bringing on more supply. If you're able to talk with a member of our sales team about a longer-term commitment, we are more likely to be able to accommodate that in our planning.
+- when possible, reserve capacity in advance — talk with our sales team about a longer-term commitment so we can plan supply accordingly
 
 ## Summary
 
@@ -98,20 +100,3 @@ We regularly add new machines, but availability is still **first come, first ser
 ### What is the best way to avoid disruption?
 
 Store your data on **Network Volumes** instead of local GPU storage. This makes it easier to switch to another available GPU and continue your workflows without waiting for a specific card type.
-
-Response for the end users -
-
-Hi {{ticket.requester.first_name}},
-
-Thank you for contacting Runpod support.
-
-I discussed your concerns with our infrastructure team to get more clarity on the situation. Right now, demand for GPU compute across the industry is at an unprecedented level, especially with ongoing memory shortages. Our datacenter team is working around the clock to procure additional capacity in stable environments without compromising reliability, but this is taking time.
-
-In the near term, there are a couple of trends that may help:
-
-- The industry is increasingly investing in data-center class GPUs (such as RTX PRO 6000, H200, B200), so we expect supply constraints to ease sooner on those compared to consumer GPUs like RTX 4090 and 5090.
-- When possible, it is easier to ensure capacity when it is reserved in advance, and that is something our team can specifically plan for when bringing on more supply. If you're able to talk with a member of our sales team about a longer-term commitment, we are more likely to be able to accommodate that in our planning.
-
-I understand this doesn’t immediately resolve the issue you’re facing, and I’m sorry again for the inconvenience.
-
-Please let me know if you’d like me to connect you with our sales team or explore alternative GPU options.
